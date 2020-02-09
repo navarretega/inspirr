@@ -18,3 +18,13 @@ double screenHeightExcludingToolbar(BuildContext context,
     {double dividedBy = 1}) {
   return screenHeight(context, dividedBy: dividedBy, reducedBy: kToolbarHeight);
 }
+
+double screenHeightExcludingBottombar(BuildContext context,
+    {double dividedBy = 1}) {
+  return screenHeight(context, dividedBy: dividedBy, reducedBy: kBottomNavigationBarHeight);
+}
+
+double screenHeightExcludingToolbarAndBottombar(BuildContext context,
+    {double dividedBy = 1}) {
+  return screenHeight(context, dividedBy: dividedBy, reducedBy: kToolbarHeight + kBottomNavigationBarHeight);
+}

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,6 +6,7 @@ import 'package:inspirr/app/home/text_page.dart';
 import 'package:inspirr/models/textAI.dart';
 import 'package:inspirr/services/database.dart';
 import 'package:inspirr/utils/constants.dart';
+import 'package:inspirr/utils/screen_size.dart';
 import 'package:provider/provider.dart';
 
 class TextsPage extends StatelessWidget {
@@ -29,23 +31,28 @@ class TextsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final double _height = screenHeightExcludingBottombar(context);
+    final double _width = screenWidth(context);
+    var myGroup = AutoSizeGroup();
+
     final database = Provider.of<Database>(context);
     if (did != null) {
-      return _anon();
+      return _anon(_height, _width);
     } else {
       return StreamBuilder<List<TextAI>>(
         stream: database.textsStream(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print(snapshot.error);
-            return _error();
+            return _error(_height, _width);
           } else {
             if (snapshot.hasData) {
               if (snapshot.data.isNotEmpty) {
                 final texts = snapshot.data;
-                return _text(texts, context);
+                return _text(_height, _width, myGroup, texts, context);
               } else {
-                return _noTexts();
+                return _noTexts(_height, _width);
               }
             } else {
               return _loading();
@@ -56,7 +63,7 @@ class TextsPage extends StatelessWidget {
     }
   }
 
-  Widget _text(texts, context) {
+  Widget _text(_height, _width, myGroup, texts, context) {
     texts.sort((TextAI a, TextAI b) => b.formattedDate.compareTo(a.formattedDate));
     print('# Texts: ${texts.length}');
     if (texts.length >= 20) {
@@ -64,25 +71,23 @@ class TextsPage extends StatelessWidget {
       texts = texts.sublist(0, 20);
     }
     return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(10, 25, 10, 0),
+      padding: EdgeInsets.fromLTRB(10, 25, 10, 0),
       itemCount: texts.length,
       itemBuilder: (_, index) {
-        // print(index);
-        return _textCard(texts, index, context);
+        return _textCard(_height, _width, myGroup, texts, index, context);
       },
     );
   }
 
-  Widget _textCard(texts, index, context) {
+  Widget _textCard(height, width, myGroup, texts, index, context) {
     var category = texts[index].category;
-    // print('$index - $category');
     var text = texts[index].text;
     var formattedDate2 = texts[index].formattedDate2;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Ink(
-        height: 100,
+        height: height * .19,
         child: InkWell(
           onTap: () {
             _goToText(context, category, text, formattedDate2);
@@ -90,17 +95,13 @@ class TextsPage extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              AspectRatio(
-                aspectRatio: 1.0,
-                child: _thumbnail(categoriesMap[category]['color'],
-                    categoriesMap[category]['img']),
+              Container(
+                width: width * .25,
+                child: _thumbnail(categoriesMap[category]['color'], categoriesMap[category]['img']),
               ),
+              SizedBox(width: 10.0),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
-                  child: _cardDescription(category, text,
-                      categoriesMap[category]['author'], formattedDate2),
-                ),
+                child: _cardDescription(height * .19, myGroup, category, text, categoriesMap[category]['author'], formattedDate2),
               )
             ],
           ),
@@ -122,55 +123,70 @@ class TextsPage extends StatelessWidget {
     );
   }
 
-  Widget _cardDescription(category, text, author, formattedDate2) {
+  Widget _cardDescription(height, myGroup, category, text, author, formattedDate2) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Expanded(
-          flex: 2,
+        Container(
+          height: height *.70,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                '$category',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
+              Container(
+                height: (height *.50) * .30,
+                child: AutoSizeText(
+                  '$category',
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-              const Padding(padding: EdgeInsets.only(bottom: 2.0)),
-              Text(
-                '$text',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 13.0,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w300,
+              Padding(padding: EdgeInsets.only(bottom: 2.0)),
+              Container(
+                height: (height *.50) * .60,
+                // color: Colors.blueGrey,
+                child: AutoSizeText(
+                  text,
+                  // minFontSize: 15.0,
+                  maxLines: 2,
+                  group: myGroup,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w300,
+                  ),
                 ),
               ),
             ],
           ),
         ),
-        Expanded(
-          flex: 1,
+        Container(
+          height: height * .30,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Text(
-                '$author',
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black87,
+              Container(
+                height: (height * .30) * .50,
+                child: AutoSizeText(
+                  '$author',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
-              Text(
-                '$formattedDate2',
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.black54,
+              Container(
+                height: (height * .30) * .50,
+                child: AutoSizeText(
+                  '$formattedDate2',
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
             ],
@@ -180,51 +196,66 @@ class TextsPage extends StatelessWidget {
     );
   }
 
-  Widget _error() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Center(
-        child: Text(
-          'Tuvimos un problema.\nIntenta más tarde.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25.0,
-            fontWeight: FontWeight.w500,
+  Widget _error(_height, _width) {
+    return Container(
+      height: _height,
+      width: _width,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        child: Center(
+          child: AutoSizeText(
+            'Tuvimos un problema. Intenta más tarde.',
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 40.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _noTexts() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Center(
-        child: Text(
-          'Aquí podrás ver todos tus textos.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25.0,
-            fontWeight: FontWeight.w500,
+  Widget _noTexts(_height, _width) {
+    return Container(
+      height: _height,
+      width: _width,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        child: Center(
+          child: AutoSizeText(
+            'Aquí podrás ver todos tus textos.',
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 40.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _anon() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
-      child: Center(
-        child: Text(
-          'Inicia sesión y aquí podrás ver todos tus textos.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25.0,
-            fontWeight: FontWeight.w500,
+  Widget _anon(_height, _width) {
+    return Container(
+      height: _height,
+      width: _width,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        child: Center(
+          child: AutoSizeText(
+            'Inicia sesión y aquí podrás ver todos tus textos.',
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 40.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),

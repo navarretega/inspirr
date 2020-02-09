@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -59,16 +60,16 @@ class SignInPage extends StatelessWidget {
     }
   }
 
-  Future<void> _signInWithFacebook(BuildContext context) async {
-    try {
-      print('NOT AVAILABLE');
-      // await manager.signInWithFacebook();
-    } on PlatformException catch (e) {
-      if (e.code != 'ERROR_ABORTED_BY_USER') {
-        _showSignInError(context, e);
-      }
-    }
-  }
+//  Future<void> _signInWithFacebook(BuildContext context) async {
+//    try {
+//      print('NOT AVAILABLE');
+//      // await manager.signInWithFacebook();
+//    } on PlatformException catch (e) {
+//      if (e.code != 'ERROR_ABORTED_BY_USER') {
+//        _showSignInError(context, e);
+//      }
+//    }
+//  }
 
   void _signInWithEmail(BuildContext context) {
     Navigator.of(context).push(
@@ -89,194 +90,220 @@ class SignInPage extends StatelessWidget {
           height: _height,
           width: _width,
           color: Color(0xFFf1f1f6),
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: _height * .15,
-                width: _width,
-                // color: Color(0xFFA93F55),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(),
-                  ],
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: _width * .05),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  // color: Colors.greenAccent,
+                  height: _height * .50,
+                  child: _buildTitle(_height * .50, _width * .95),
                 ),
-              ),
-              Container(
-                height: _height * .40,
-                width: _width,
-                padding: EdgeInsets.symmetric(horizontal: 30.0),
-                child: _buildTitle(),
-              ),
-              Container(
-                height: _height * .45,
-                width: _width,
-                padding: EdgeInsets.symmetric(horizontal: 30.0),
-                child: isLoading ? _loading() : _buildButtons(context),
-              ),
-            ],
+                Container(
+                  // color: Colors.red,
+                  height: _height * .50,
+                  child: isLoading
+                      ? _loading()
+                      : _buildButtons(_height * .50, _width * .95, context),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(height, width) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      // crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        Text(
-          '¿Te falta inspiración?',
-          style: TextStyle(
-            fontSize: 35.0,
-            color: Color(0xFF272727),
-            fontWeight: FontWeight.w700,
+        Container(
+          // color: Colors.yellow,
+          height: height * .30,
+          width: width,
+          child: AutoSizeText(
+            '¿Te falta inspiración?',
+            maxLines: 2,
+            style: TextStyle(
+              fontSize: 100.0,
+              color: Color(0xFF272727),
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         SizedBox(
           height: 10.0,
         ),
-        Text(
-          'Inicia sesión y evita el síndrome del "No sé qué escribir".',
-          style: TextStyle(
-            fontSize: 25.0,
-            color: Color(0xFF272727),
-            fontWeight: FontWeight.w500,
+        Container(
+          // color: Colors.cyan,
+          height: height * .23,
+          width: width,
+          child: AutoSizeText(
+            'Inicia sesión y evita el síndrome del "No sé qué escribir".',
+            maxLines: 3,
+            style: TextStyle(
+              fontSize: 100.0,
+              color: Color(0xFF272727),
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildButtons(context) {
+  Widget _buildButtons(height, width, context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        // SizedBox(height: 10.0),
-        // _facebookButton(context), // TODO FACEBOOK PLUGIN IS NOT WORKING ANYMORE
-        SizedBox(height: 10.0),
-        _googleButton(context),
-        SizedBox(height: 15.0),
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Divider(
-                height: 1.0,
-                thickness: 2.0,
-                color: Colors.black12,
-              ),
-            ),
-            SizedBox(width: 10.0),
-            Text(
-              'O',
-              style: TextStyle(color: Color(0xFF272727)),
-            ),
-            SizedBox(width: 10.0),
-            Expanded(
-              child: Divider(
-                height: 1.0,
-                thickness: 2.0,
-                color: Colors.black12,
-              ),
-            ),
-          ],
+        // _facebookButton(context), // FACEBOOK PLUGIN IS NOT WORKING ANYMORE
+        Container(
+          height: height * .15,
+          width: width,
+          child: _googleButton(height * .15, width, context),
         ),
-        SizedBox(height: 15.0),
-        _emailButton(context),
-        SizedBox(height: 5.0),
-        _skipButton(context),
+        Container(
+          height: height * .10,
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Divider(
+                  thickness: 3.0,
+                  color: Colors.black12,
+                ),
+              ),
+              SizedBox(width: 10.0),
+              Text(
+                'O',
+                style: TextStyle(
+                  color: Color(0xFF272727),
+                ),
+              ),
+              SizedBox(width: 10.0),
+              Expanded(
+                child: Divider(
+                  thickness: 3.0,
+                  color: Colors.black12,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: height * .15,
+          width: width,
+          child: _emailButton(height * .15, width, context),
+        ),
+        SizedBox(height: 20.0),
+        Container(
+          height: height * .07,
+          width: width,
+          child: _skipButton(context),
+        ),
+        SizedBox(height: 30.0),
       ],
     );
   }
 
-  Widget _googleButton(context) {
+  Widget _googleButton(height, width, context) {
     return RaisedButton(
       onPressed: () => _signInWithGoogle(context),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        // side: BorderSide(color: Colors.white),
       ),
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
       color: Color(0xFF272727),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            'Continua con Google',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
+          Container(
+            width: width * .60,
+            child: AutoSizeText(
+              'Continua con Google',
+              maxLines: 1,
+              maxFontSize: 25.0,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25.0,
+                fontWeight: FontWeight.w300,
+              ),
             ),
           ),
-          Image.asset(
-            'assets/google-logo.png',
-            height: 20.0,
-            width: 20.0,
-            color: Colors.white,
+          Expanded(
+            child: Container(
+              child: Image.asset(
+                'assets/google-logo.png',
+                height: height * .50,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _facebookButton(context) {
-    return RaisedButton(
-      onPressed: () => _signInWithFacebook(context),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        // side: BorderSide(color: Colors.white),
-      ),
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
-      color: Color(0xFF272727),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            'Continua con Facebook',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          Image.asset(
-            'assets/facebook-logo.png',
-            height: 20.0,
-            width: 20.0,
-            color: Colors.white,
-          ),
-        ],
-      ),
-    );
-  }
+//  Widget _facebookButton(context) {
+//    return RaisedButton(
+//      onPressed: () => _signInWithFacebook(context),
+//      shape: RoundedRectangleBorder(
+//        borderRadius: BorderRadius.circular(10.0),
+//        // side: BorderSide(color: Colors.white),
+//      ),
+//      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
+//      color: Color(0xFF272727),
+//      child: Row(
+//        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//        children: <Widget>[
+//          Text(
+//            'Continua con Facebook',
+//            style: TextStyle(
+//              color: Colors.white,
+//              fontSize: 20.0,
+//              fontWeight: FontWeight.w300,
+//            ),
+//          ),
+//          Image.asset(
+//            'assets/facebook-logo.png',
+//            height: 20.0,
+//            width: 20.0,
+//            color: Colors.white,
+//          ),
+//        ],
+//      ),
+//    );
+//  }
 
-  Widget _emailButton(context) {
+  Widget _emailButton(height, width, context) {
     return RaisedButton(
       onPressed: () => _signInWithEmail(context),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        // side: BorderSide(color: Colors.white),
       ),
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
       color: Color(0xFF272727),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            'Prefiero usar Email',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
+          Container(
+            width: width * .60,
+            child: AutoSizeText(
+              'Continua con Email',
+              maxLines: 1,
+              maxFontSize: 25.0,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 50.0,
+                fontWeight: FontWeight.w300,
+              ),
             ),
           ),
-          Image.asset(
-            'assets/email.png',
-            height: 20.0,
-            width: 20.0,
+          Expanded(
+            child: Container(
+              child: Image.asset(
+                'assets/email.png',
+                height: height * .50,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
@@ -287,10 +314,11 @@ class SignInPage extends StatelessWidget {
     return FlatButton(
       onPressed: () => _signInAnonymously(context),
       splashColor: Colors.white,
-      child: Text(
+      child: AutoSizeText(
         'Omitir',
+        maxLines: 1,
         style: TextStyle(
-          fontSize: 20.0,
+          fontSize: 50.0,
           decoration: TextDecoration.underline,
           color: Color(0xFF272727),
           fontWeight: FontWeight.w300,
@@ -303,7 +331,7 @@ class SignInPage extends StatelessWidget {
     return Center(
       child: SpinKitChasingDots(
         color: Color.fromRGBO(47, 46, 65, 1),
-        size: 80.0,
+        size: 90.0,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:inspirr/services/gpt2.dart';
@@ -125,8 +126,10 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double _height = screenHeight(context);
+
+    final double _height = screenHeightExcludingBottombar(context);
     final double _width = screenWidth(context);
+    var myGroup = AutoSizeGroup();
 
     return isLoading
         ? _loading(_height)
@@ -138,12 +141,13 @@ class _MainPageState extends State<MainPage> {
                   width: _width,
                   margin: EdgeInsets.fromLTRB(10, 60, 10, 0),
                   child: Center(
-                    child: Text(
+                    child: AutoSizeText(
                       '¿Que buscas escribir?',
+                      maxLines: 1,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -157,22 +161,22 @@ class _MainPageState extends State<MainPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          _buildCard('LIBRO', categoriesMap['LIBRO']['img'], categoriesMap['LIBRO']['color']),
-                          _buildCard('MUSICA', categoriesMap['MUSICA']['img'], categoriesMap['MUSICA']['color']),
+                          _buildCard(_height * .90, _width, myGroup, 'LIBRO', categoriesMap['LIBRO']['img'], categoriesMap['LIBRO']['color']),
+                          _buildCard(_height * .90, _width, myGroup, 'ENSAYO', categoriesMap['ENSAYO']['img'], categoriesMap['ENSAYO']['color']),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          _buildCard('PELICULA', categoriesMap['PELICULA']['img'], categoriesMap['PELICULA']['color']),
-                          _buildCard('ARTICULO', categoriesMap['ARTICULO']['img'], categoriesMap['ARTICULO']['color']),
+                          _buildCard(_height * .90, _width, myGroup, 'PELICULA', categoriesMap['PELICULA']['img'], categoriesMap['PELICULA']['color']),
+                          _buildCard(_height * .90, _width, myGroup, 'ARTICULO', categoriesMap['ARTICULO']['img'], categoriesMap['ARTICULO']['color']),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          _buildCard('CITA', categoriesMap['CITA']['img'], categoriesMap['CITA']['color']),
-                          // _buildCard('TODO', 'assets/mindful.jpg', Color(0xFFFFEDB0)),
+                          _buildCard(_height * .90, _width, myGroup, 'CITA', categoriesMap['CITA']['img'], categoriesMap['CITA']['color']),
+                          _buildCard(_height * .90, _width, myGroup, 'MUSICA', categoriesMap['MUSICA']['img'], categoriesMap['MUSICA']['color']),
                         ],
                       ),
                     ],
@@ -183,11 +187,11 @@ class _MainPageState extends State<MainPage> {
           );
   }
 
-  Widget _buildCard(name, img, color) {
+  Widget _buildCard(height, _width, myGroup, name, img, color) {
     return Material(
       child: Ink(
-        height: 160,
-        width: 160,
+        height: height * .27,
+        width: _width * .42,
         decoration: BoxDecoration(
           color: color,
           image: DecorationImage(
@@ -201,12 +205,14 @@ class _MainPageState extends State<MainPage> {
             _validateUser(name);
           },
           child: Container(
-            margin: EdgeInsets.fromLTRB(15, 15, 0, 0),
-            child: Text(
+            margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+            child: AutoSizeText(
               name,
+              group: myGroup,
+              maxLines: 1,
               style: TextStyle(
                 color: Color(0xFF083232),
-                fontSize: 18.0,
+                fontSize: 25.0,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:inspirr/utils/asset.dart';
 import 'package:inspirr/utils/constants.dart';
@@ -43,7 +44,10 @@ class TextPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final double _height = screenHeightExcludingToolbar(context);
     final double _width = screenWidth(context);
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Color(0xFF272727)),
@@ -70,98 +74,86 @@ class TextPage extends StatelessWidget {
           )
         ],
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        height: _height,
+        width: _width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-//            Center(
-//              child: Padding(
-//                padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-//                child: Text(
-//                  '$category',
-//                  style: TextStyle(
-//                    fontSize: 30.0,
-//                    color: Color.fromRGBO(47, 46, 65, 1),
-//                    fontWeight: FontWeight.w700,
-//                  ),
-//                ),
-//              ),
-//            ),
             Container(
-              height: 100.0,
+              height: _height * .15,
               width: _width,
-              color: categoriesMap[category]['color'],// Color(0xFF272727),
-//              decoration: BoxDecoration(
-//                image: DecorationImage(
-//                  image: AssetImage('assets/robots.png'),
-//                  fit: BoxFit.cover,
-//                ),
-//              ),
+              color: categoriesMap[category]['color'],
               child: Center(
-                  child: Text(
+                  child: AutoSizeText(
                     category,
                     style: TextStyle(
-                      fontSize: 30.0,
+                      fontSize: 50.0,
                       color: Color(0xFF083232),
                       fontWeight: FontWeight.w700,
                     ),
                   ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(15, 25, 15, 25),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/robot-2.png'),
-                        // backgroundColor: categoriesMap[category]['color'],
-                        radius: 25.0,
-                      ),
-                      Padding(padding: const EdgeInsets.fromLTRB(5, 0, 5, 0)),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: <Widget>[
-                          Text(
-                            categoriesMap[category]['author'],
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: Color.fromRGBO(47, 46, 65, 1),
-                              fontWeight: FontWeight.w700,
-                            ),
+                          CircleAvatar(
+                            backgroundImage: AssetImage('assets/robot-2.png'),
+                            // backgroundColor: categoriesMap[category]['color'],
+                            radius: 25.0,
                           ),
-                          SizedBox(
-                            height: 5.0,
+                          Padding(padding: const EdgeInsets.fromLTRB(5, 0, 5, 0)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              AutoSizeText(
+                                categoriesMap[category]['author'],
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Color.fromRGBO(47, 46, 65, 1),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              AutoSizeText(
+                                '$formattedDate2',
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.grey,
+                                ),
+                              )
+                            ],
                           ),
-                          Text(
-                            '$formattedDate2',
-                            style: TextStyle(
-                                fontSize: 13.0,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.grey),
-                          )
                         ],
                       ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      ),
+                      Divider(height: 1.5, thickness: 2.5),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      ),
+                      AutoSizeText(
+                        '$text',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w300,
+                          color: Color.fromRGBO(47, 46, 65, 1),
+                        ),
+                      )
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  ),
-                  Divider(height: 1.5, thickness: 2.5),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  ),
-                  Text(
-                    '$text',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w300,
-                      color: Color.fromRGBO(47, 46, 65, 1),
-                    ),
-                  )
-                ],
+                ),
               ),
             )
           ],

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:inspirr/app/sign_in/email_sign_in_model.dart';
@@ -9,10 +10,9 @@ import 'package:inspirr/utils/platformAlertDialog.dart';
 import 'package:flutter/services.dart';
 
 class EmailSignInPage extends StatefulWidget {
-
   final EmailSignInModel model;
-  const EmailSignInPage({Key key, @required this.model}) : super(key: key);
 
+  const EmailSignInPage({Key key, @required this.model}) : super(key: key);
 
   static Widget create(BuildContext context) {
     final AuthBase auth = Provider.of<AuthBase>(context);
@@ -61,7 +61,7 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
 
   void _emailEditingComplete() {
     final newFocus =
-    widget.model.email.isNotEmpty ? _passFocusNode : _emailFocusNode;
+        widget.model.email.isNotEmpty ? _passFocusNode : _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 
@@ -90,7 +90,8 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
       Navigator.of(context).pop();
       PlatformAlertDialog(
         title: 'Verifica tu email',
-        content: 'Por favor verifica tu email revisando el correo que te acabamos de mandar.',
+        content:
+            'Por favor verifica tu email revisando el correo que te acabamos de mandar.',
         defaultActionText: 'OK',
       ).show(context);
     } on PlatformException catch (e) {
@@ -135,92 +136,120 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
           height: _height,
           width: _width,
           color: Color(0xFFf1f1f6),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'No tienes que ser escritor.',
-                  style: TextStyle(
-                    fontSize: 35.0,
-                    color: Color(0xFF272727),
-                    fontWeight: FontWeight.w700,
-                  ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: _height * .30,
+                width: _width * .80,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: (_height * .30) * .40,
+                      child: AutoSizeText(
+                        'No tienes que ser escritor.',
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 50.0,
+                          color: Color(0xFF272727),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 50.0,),
-                widget.model.isLoading ? _loading() : _form(),
-              ],
-            ),
+              ),
+              // SizedBox(height: 50.0,),
+              Container(
+                height: _height * .70,
+                width: _width * .80,
+                child: widget.model.isLoading ? _loading() : _form(_height * .70, _width * .80),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _form() {
+  Widget _form(height, width) {
     if (widget.model.formType == FormType.signIn) {
-      return _signInForm();
+      return _signInForm(height, width);
     } else if (widget.model.formType == FormType.register) {
-      return _registerForm();
+      return _registerForm(height);
     } else {
-      return _resetPasswordForm();
+      return _resetPasswordForm(height);
     }
   }
 
-  Widget _signInForm() {
+  Widget _signInForm(height, width) {
+
+    var myGroup = AutoSizeGroup();
+
     return Column(
       children: <Widget>[
-        _emailField(_emailEditingComplete, TextInputAction.next),
+        _emailField(height, _emailEditingComplete, TextInputAction.next),
         SizedBox(height: 10.0),
-        _passwordField(_signInWithEmailAndPassword, TextInputAction.done),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            FlatButton(
+        _passwordField(height, _signInWithEmailAndPassword, TextInputAction.done),
+        SizedBox(height: 15.0),
+        Padding(
+          padding: EdgeInsets.only(left: width * .20),
+          child: Container(
+            height: height * .05,
+            child: FlatButton(
               onPressed: () => _setFormType(FormType.forgotPassword),
               splashColor: Colors.white,
-              child: Text(
+              child: AutoSizeText(
                 '¿Olvidaste tu contraseña?',
-                textAlign: TextAlign.center,
+                group: myGroup,
+                maxLines: 1,
                 style: TextStyle(
-                  fontSize: 12.0,
+                  fontSize: 17.0,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF272727),
+                  color: Color(0xFF272727)
                 ),
               ),
             ),
-          ],
-        ),
-        SizedBox(height: 20.0),
-        RaisedButton(
-          onPressed: _signInWithEmailAndPassword,
-          color: Color(0xFF272727),
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            // side: BorderSide(color: Colors.white),
-          ),
-          child: Text(
-            'Inicia sesión',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-            ),
           ),
         ),
-        SizedBox(height: 20.0),
-        FlatButton(
-          onPressed: () => _setFormType(FormType.register),
-          splashColor: Colors.white,
-          child: Text(
-            '¿Primera vez aquí? Regístrate',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 15.0,
-              fontWeight: FontWeight.w700,
-              color: Color.fromRGBO(47, 46, 65, 1),
+        SizedBox(height: 40.0),
+        Container(
+          height: height * .10,
+          child: RaisedButton(
+            onPressed: _signInWithEmailAndPassword,
+            color: Color(0xFF272727),
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              // side: BorderSide(color: Colors.white),
+            ),
+            child: AutoSizeText(
+              'Inicia sesión',
+              maxLines: 1,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 40.0),
+        Container(
+          height: height * .05,
+          child: FlatButton(
+            onPressed: () => _setFormType(FormType.register),
+            splashColor: Colors.white,
+            child: AutoSizeText(
+              '¿Primera vez aquí? Regístrate',
+              group: myGroup,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700,
+                color: Color.fromRGBO(47, 46, 65, 1),
+              ),
             ),
           ),
         )
@@ -228,29 +257,33 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
     );
   }
 
-  Widget _registerForm() {
+  Widget _registerForm(height) {
     return Column(
       children: <Widget>[
-        _emailField(_emailEditingComplete, TextInputAction.next),
+        _emailField(height, _emailEditingComplete, TextInputAction.next),
         SizedBox(height: 10.0),
-        _passwordField(_passwordEditingComplete, TextInputAction.next),
+        _passwordField(height, _passwordEditingComplete, TextInputAction.next),
         SizedBox(height: 10.0),
-        _passwordVerifyField(),
-        SizedBox(height: 20.0),
-        RaisedButton(
-          onPressed: _createUserWithEmailAndPassword,
-          color: Color(0xFF272727),
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            // side: BorderSide(color: Colors.white),
-          ),
-          child: Text(
-            'Registrate',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
+        _passwordVerifyField(height),
+        SizedBox(height: 40.0),
+        Container(
+          height: height * .12,
+          child: RaisedButton(
+            onPressed: _createUserWithEmailAndPassword,
+            color: Color(0xFF272727),
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              // side: BorderSide(color: Colors.white),
+            ),
+            child: AutoSizeText(
+              'Registrate',
+              maxLines: 1,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30.0,
+                fontWeight: FontWeight.w300,
+              ),
             ),
           ),
         )
@@ -258,25 +291,29 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
     );
   }
 
-  Widget _resetPasswordForm() {
+  Widget _resetPasswordForm(height) {
     return Column(
       children: <Widget>[
-        _emailField(_resetPassword, TextInputAction.done),
-        SizedBox(height: 20.0),
-        RaisedButton(
-          onPressed: _resetPassword,
-          color: Color(0xFF272727),
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            // side: BorderSide(color: Colors.white),
-          ),
-          child: Text(
-            'Reinicia tu contraseña',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
+        _emailField(height, _resetPassword, TextInputAction.done),
+        SizedBox(height: 40.0),
+        Container(
+          height: height * .12,
+          child: RaisedButton(
+            onPressed: _resetPassword,
+            color: Color(0xFF272727),
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              // side: BorderSide(color: Colors.white),
+            ),
+            child: AutoSizeText(
+              'Reinicia tu contraseña',
+              maxLines: 1,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30.0,
+                fontWeight: FontWeight.w300,
+              ),
             ),
           ),
         )
@@ -284,14 +321,14 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
     );
   }
 
-  Widget _emailField(
-      VoidCallback onEditingComplete, TextInputAction inputAction) {
+  Widget _emailField(double height, VoidCallback onEditingComplete, TextInputAction inputAction) {
     return Theme(
       data: ThemeData(
         primaryColor: Color(0xFFA93F55),
         hintColor: Colors.grey,
       ),
       child: TextField(
+        style: TextStyle(fontSize: height * .05),
         controller: _emailController,
         focusNode: _emailFocusNode,
         onEditingComplete: onEditingComplete,
@@ -300,7 +337,7 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
         keyboardType: TextInputType.emailAddress,
         textInputAction: inputAction,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.email),
+          prefixIcon: Icon(Icons.email, size: height * .05),
           hintText: 'Tu email',
         ),
         cursorColor: Color(0xFFA93F55),
@@ -308,13 +345,14 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
     );
   }
 
-  Widget _passwordField(VoidCallback onEditingComplete, TextInputAction inputAction) {
+  Widget _passwordField(double height, VoidCallback onEditingComplete, TextInputAction inputAction) {
     return Theme(
       data: ThemeData(
         primaryColor: Color(0xFFA93F55),
         hintColor: Colors.grey,
       ),
       child: TextField(
+        style: TextStyle(fontSize: height * .05),
         controller: _passController,
         focusNode: _passFocusNode,
         onEditingComplete: onEditingComplete,
@@ -322,7 +360,7 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
         textInputAction: inputAction,
         obscureText: true,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.lock),
+          prefixIcon: Icon(Icons.lock, size: height * .05),
           hintText: 'Tu contraseña',
         ),
         cursorColor: Color(0xFFA93F55),
@@ -330,13 +368,14 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
     );
   }
 
-  Widget _passwordVerifyField() {
+  Widget _passwordVerifyField(height) {
     return Theme(
       data: ThemeData(
         primaryColor: Color(0xFFA93F55),
         hintColor: Colors.grey,
       ),
       child: TextField(
+        style: TextStyle(fontSize: height * .05),
         controller: _passVerifyController,
         focusNode: _passVerifyFocusNode,
         onEditingComplete: _createUserWithEmailAndPassword,
@@ -344,8 +383,8 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
         textInputAction: TextInputAction.done,
         obscureText: true,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.lock),
-          hintText: 'Vuelve a ingresar tu contraseña',
+          prefixIcon: Icon(Icons.lock, size: height * .05),
+          hintText: 'Tu contraseña',
         ),
         cursorColor: Color(0xFFA93F55),
       ),
@@ -360,5 +399,4 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
       ),
     );
   }
-
 }

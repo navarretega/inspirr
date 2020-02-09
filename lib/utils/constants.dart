@@ -25,5 +25,10 @@ var categoriesMap = {
     'color': Color(0xFFF5F5F5),
     'author': 'Por CIAI',
     'img': 'assets/cita.png'
+  },
+  'ENSAYO': {
+    'color': Color(0xFFFFEDB0),
+    'author': 'Por ENAI',
+    'img': 'assets/ensayo.png'
   }
 };

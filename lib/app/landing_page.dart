@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:inspirr/app/home/home_page.dart';
 import 'package:inspirr/app/sign_in/sign_in_page.dart';
@@ -38,47 +40,87 @@ class _LandingPageState extends State<LandingPage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           User user = snapshot.data;
+          // NOT LOGGED IN
+          print('AUTH - Not logged in');
           if (user == null) {
             return SignInPage.create(context);
           } else {
+            // LOGGED IN AS ANON
             if (user.isAnonymous) {
-              // TODO: IOS MISSING !!!
-              return FutureBuilder<AndroidDeviceInfo>(
-                future: _deviceInfoPlugin.androidInfo,
-                builder: (BuildContext context,
-                    AsyncSnapshot<AndroidDeviceInfo> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    final androidDeviceInfo = snapshot.data;
-                    return Provider<Database>(
-                      create: (_) => FirestoreDatabase(
-                        uid: user.uid,
-                        did: androidDeviceInfo.androidId,
-                      ),
-                      child: HomePage(
-                        uid: user.uid,
-                        did: androidDeviceInfo.androidId,
-                      ),
-                    );
-                  }
-                },
-              );
+              // LOGGED IN AS ANON WITH IOS
+              if (Platform.isIOS) {
+                print('AUTH - Logged in as ANON (IOS)');
+                return FutureBuilder<IosDeviceInfo>(
+                  future: _deviceInfoPlugin.iosInfo,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<IosDeviceInfo> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      final iosDeviceInfo = snapshot.data;
+                      return Provider<Database>(
+                        create: (_) =>
+                            FirestoreDatabase(
+                              uid: user.uid,
+                              did: iosDeviceInfo.identifierForVendor,
+                            ),
+                        child: HomePage(
+                          uid: user.uid,
+                          did: iosDeviceInfo.identifierForVendor,
+                        ),
+                      );
+                    }
+                  },
+                );
+              } else {
+                // LOGGED IN AS ANON WITH ANDROID
+                print('AUTH - Logged in as ANON (Android)');
+                return FutureBuilder<AndroidDeviceInfo>(
+                  future: _deviceInfoPlugin.androidInfo,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<AndroidDeviceInfo> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      final androidDeviceInfo = snapshot.data;
+                      return Provider<Database>(
+                        create: (_) =>
+                            FirestoreDatabase(
+                              uid: user.uid,
+                              did: androidDeviceInfo.androidId,
+                            ),
+                        child: HomePage(
+                          uid: user.uid,
+                          did: androidDeviceInfo.androidId,
+                        ),
+                      );
+                    }
+                  },
+                );
+              }
             } else {
               if (socialProviders.contains(user.provider)) {
+                // LOGGED IN WITH GOOGLE/FACEBOOK
+                print('AUTH - Logged in with social provider (${user.provider})');
                 return Provider<Database>(
                   create: (_) => FirestoreDatabase(uid: user.uid),
                   child: HomePage(uid: user.uid, email: user.email),
                 );
               } else {
                 if (user.isVerified) {
+                  // LOGGED WITH EMAIL
+                  print('AUTH - Logged in with verified email');
                   return Provider<Database>(
                     create: (_) => FirestoreDatabase(uid: user.uid),
                     child: HomePage(uid: user.uid, email: user.email),
                   );
                 } else {
+                  // TRIED TO LOGGED IN WITH UNVERIFIED EMAIL
+                  print('AUTH - Tried to logged in with unverified email');
                   _signOut(context);
                   return SignInPage.create(context);
                 }

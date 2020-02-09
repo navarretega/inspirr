@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:inspirr/app/home/subscribe_page.dart';
 import 'package:inspirr/services/auth.dart';
@@ -25,23 +26,33 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final double _height = screenHeight(context);
+    final double _height = screenHeightExcludingBottombar(context);
     // final double _width = screenWidth(context);
+    var myGroup = AutoSizeGroup();
 
     Widget custom;
     bool _isAnon;
     if (email == null) {
-      custom = SizedBox(
-        height: 2.0,
+      custom = Center(
+        child: AutoSizeText(
+          'Anónimo',
+          style: TextStyle(
+            color: Color(0xFF272727),
+            fontSize: 25.0,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       );
       _isAnon = true;
     } else {
-      custom = Text(
-        email,
-        style: TextStyle(
-          color: Color(0xFF272727),
-          fontSize: 20.0,
-          fontWeight: FontWeight.w500,
+      custom = Center(
+        child: AutoSizeText(
+          email,
+          style: TextStyle(
+            color: Color(0xFF272727),
+            fontSize: 25.0,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
       _isAnon = false;
@@ -55,17 +66,28 @@ class SettingsPage extends StatelessWidget {
             height: _height * .45,
             //fit: BoxFit.fill,
           ),
-          custom,
           Padding(
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 20.0),
+            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
             child: Divider(height: 1.5, thickness: 2.5),
           ),
           Container(
-            // height: _height * .30,
-            child: _buildLayout(context, _isAnon),
+            height: _height * .05,
+            child: custom,
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+            child: Divider(height: 1.5, thickness: 2.5),
+          ),
+          Container(
+            height: _height * .30,
+            child: _buildLayout(context, _height * .30, myGroup, _isAnon),
           ),
           SizedBox(height: 15.0),
-          _customButton(context),
+          Container(
+            height: _height * .08,
+            child: _customButton(context),
+          ),
+          SizedBox(height: 25.0),
         ],
       ),
     );
@@ -84,11 +106,9 @@ class SettingsPage extends StatelessWidget {
       onPressed: () => _signOut(context),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        // side: BorderSide(color: Colors.white),
       ),
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
       color: Color(0xFF272727),
-      child: Text(
+      child: AutoSizeText(
         buttonText,
         style: TextStyle(
           color: Colors.white,
@@ -99,12 +119,19 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLayout(context, _isAnon) {
+  Widget _buildLayout(context, height, myGroup, _isAnon) {
 
     Widget listTile;
     if (paidUser) {
       listTile = ListTile(
-        title: Text('Cancelar suscripción'),
+        title: AutoSizeText(
+          'Cancelar suscripción',
+          maxLines: 1,
+          group: myGroup,
+          style: TextStyle(
+            fontSize: 20.0
+          ),
+        ),
         trailing: Icon(Icons.arrow_forward_ios),
         onTap: () {
           print('TODO - CANCEL SUBSCRIPTION');
@@ -112,7 +139,14 @@ class SettingsPage extends StatelessWidget {
       );
     } else {
       listTile = ListTile(
-        title: Text('¿Quieres textos ilimitados?'),
+        title: AutoSizeText(
+          '¿Quieres textos ilimitados?',
+          maxLines: 1,
+          group: myGroup,
+          style: TextStyle(
+            fontSize: 20.0
+          ),
+        ),
         trailing: Icon(Icons.arrow_forward_ios),
         onTap: () {
           Navigator.of(context).push(
@@ -127,29 +161,48 @@ class SettingsPage extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        listTile,
-        ListTile(
-          title: Text('¿Necesitas ayuda?'),
-          trailing: Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            PlatformAlertDialog(
-              title: 'Te respondemos el mismo día',
-              content: 'Mándanos un correo a alex@brisai.com',
-              defaultActionText: 'OK',
-            ).show(context);
-          },
+        Container(
+          height: height * .30,
+          child: listTile,
         ),
-        ListTile(
-          title: Text('Créditos'),
-          trailing: Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            PlatformAlertDialog(
-              title: 'Créditos',
-              content:
-                  'Icon made by Google from www.flaticon.com\nIcon made by geotatah from www.flaticon.com\nIcon made by Pixel perfect from www.flaticon.com\nIcon made by Icongeek26 from www.flaticon.com\nIcon made by mavadee from www.flaticon.com\nIcon made by Freepik from www.flaticon.com',
-              defaultActionText: 'OK',
-            ).show(context);
-          },
+        Container(
+          height: height * .30,
+          child: ListTile(
+            title: AutoSizeText(
+              '¿Necesitas ayuda?',
+              maxLines: 1,
+              group: myGroup,
+              style: TextStyle(fontSize: 20.0),
+            ),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              PlatformAlertDialog(
+                title: 'Te respondemos el mismo día',
+                content: 'Mándanos un correo a alex@brisai.com',
+                defaultActionText: 'OK',
+              ).show(context);
+            },
+          ),
+        ),
+        Container(
+          height: height * .30,
+          child: ListTile(
+            title: AutoSizeText(
+              'Créditos',
+              maxLines: 1,
+              group: myGroup,
+              style: TextStyle(fontSize: 20.0),
+            ),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              PlatformAlertDialog(
+                title: 'Créditos',
+                content:
+                    'Icon made by Google from www.flaticon.com\nIcon made by geotatah from www.flaticon.com\nIcon made by Pixel perfect from www.flaticon.com\nIcon made by Icongeek26 from www.flaticon.com\nIcon made by mavadee from www.flaticon.com\nIcon made by Freepik from www.flaticon.com\nIcon made by srip from www.flaticon.com',
+                defaultActionText: 'OK',
+              ).show(context);
+            },
+          ),
         ),
       ],
     );
