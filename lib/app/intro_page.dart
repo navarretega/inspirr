@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:inspirr/app/landing_page.dart';
-import 'package:inspirr/services/auth.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroPage extends StatelessWidget {
@@ -14,8 +12,7 @@ class IntroPage extends StatelessWidget {
     await prefs.setBool('firstRun', true);
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => Provider<AuthBase>(
-            create: (context) => Auth(), child: LandingPage()),
+        builder: (_) => LandingPage(),
       ),
     );
   }
@@ -48,10 +45,7 @@ class IntroPage extends StatelessWidget {
                 return _buildIntroScreen(context);
               } else {
                 print('Existing device - Getting Auth');
-                return Provider<AuthBase>(
-                  create: (context) => Auth(),
-                  child: LandingPage(),
-                );
+                return LandingPage();
               }
             } else {
               print('LOADING');

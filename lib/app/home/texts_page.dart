@@ -87,7 +87,7 @@ class TextsPage extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Ink(
-        height: height * .19,
+        height: height * .18,
         child: InkWell(
           onTap: () {
             _goToText(context, category, text, formattedDate2);
@@ -101,7 +101,7 @@ class TextsPage extends StatelessWidget {
               ),
               SizedBox(width: 10.0),
               Expanded(
-                child: _cardDescription(height * .19, myGroup, category, text, categoriesMap[category]['author'], formattedDate2),
+                child: _cardDescription(height * .18, myGroup, category, text, categoriesMap[category]['author'], formattedDate2),
               )
             ],
           ),
@@ -145,12 +145,12 @@ class TextsPage extends StatelessWidget {
               ),
               Padding(padding: EdgeInsets.only(bottom: 2.0)),
               Container(
-                height: (height *.50) * .60,
+                height: (height *.50) * .65,
                 // color: Colors.blueGrey,
                 child: AutoSizeText(
                   text,
                   // minFontSize: 15.0,
-                  maxLines: 2,
+                  maxLines: 3,
                   group: myGroup,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
