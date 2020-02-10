@@ -55,7 +55,7 @@ class TextPage extends StatelessWidget {
         actions: <Widget>[
           FlatButton(
             child: Text(
-              'IMPORTANTE',
+              '¿COMO FUNCIONA?',
               style: TextStyle(color: Color(0xFF272727)),
             ),
             onPressed: () {

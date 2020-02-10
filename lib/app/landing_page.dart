@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:inspirr/app/home/home_page.dart';
 import 'package:inspirr/app/sign_in/sign_in_page.dart';
 import 'package:inspirr/services/auth.dart';
@@ -55,17 +56,21 @@ class _LandingPageState extends State<LandingPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<IosDeviceInfo> snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(),
+                      return Scaffold(
+                        body: Center(
+                          child: SpinKitChasingDots(
+                            color: Color.fromRGBO(47, 46, 65, 1),
+                            size: 90.0,
+                          ),
+                        ),
                       );
                     } else {
                       final iosDeviceInfo = snapshot.data;
                       return Provider<Database>(
-                        create: (_) =>
-                            FirestoreDatabase(
-                              uid: user.uid,
-                              did: iosDeviceInfo.identifierForVendor,
-                            ),
+                        create: (_) => FirestoreDatabase(
+                          uid: user.uid,
+                          did: iosDeviceInfo.identifierForVendor,
+                        ),
                         child: HomePage(
                           uid: user.uid,
                           did: iosDeviceInfo.identifierForVendor,
@@ -82,17 +87,21 @@ class _LandingPageState extends State<LandingPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<AndroidDeviceInfo> snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(),
+                      return Scaffold(
+                        body: Center(
+                          child: SpinKitChasingDots(
+                            color: Color.fromRGBO(47, 46, 65, 1),
+                            size: 90.0,
+                          ),
+                        ),
                       );
                     } else {
                       final androidDeviceInfo = snapshot.data;
                       return Provider<Database>(
-                        create: (_) =>
-                            FirestoreDatabase(
-                              uid: user.uid,
-                              did: androidDeviceInfo.androidId,
-                            ),
+                        create: (_) => FirestoreDatabase(
+                          uid: user.uid,
+                          did: androidDeviceInfo.androidId,
+                        ),
                         child: HomePage(
                           uid: user.uid,
                           did: androidDeviceInfo.androidId,
@@ -105,7 +114,8 @@ class _LandingPageState extends State<LandingPage> {
             } else {
               if (socialProviders.contains(user.provider)) {
                 // LOGGED IN WITH GOOGLE/FACEBOOK
-                print('AUTH - Logged in with social provider (${user.provider})');
+                print(
+                    'AUTH - Logged in with social provider (${user.provider})');
                 return Provider<Database>(
                   create: (_) => FirestoreDatabase(uid: user.uid),
                   child: HomePage(uid: user.uid, email: user.email),
@@ -130,7 +140,10 @@ class _LandingPageState extends State<LandingPage> {
         } else {
           return Scaffold(
             body: Center(
-              child: CircularProgressIndicator(),
+              child: SpinKitChasingDots(
+                color: Color.fromRGBO(47, 46, 65, 1),
+                size: 90.0,
+              ),
             ),
           );
         }
