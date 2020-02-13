@@ -32,11 +32,11 @@ class _MainPageState extends State<MainPage> {
     super.dispose();
   }
 
-  Future<void> _createText(String category, Database database, bool saveText) async {
+  Future<void> _createText(bool isAnon, String category, Database database) async {
     try {
       Gpt2 instance = Gpt2(category: category);
       await instance.getData();
-      if (saveText) {
+      if (isAnon == false) {
         await database.createText(TextAI(
           category: instance.category,
           text: instance.text,
@@ -65,52 +65,35 @@ class _MainPageState extends State<MainPage> {
       setState(() { isLoading = true; });
 
       final database = Provider.of<Database>(context, listen: false);
+      bool _isAnon;
 
       if (widget.did != null) {
-        // ANON USER
-        print('USER - ANON (DID: ${widget.did})');
-        final Map data = await database.getAnonData();
-        if (data['count'] <= 5) {
-          // NO PAY-WALL
-          print('PAY-WALL - NO (${data['count']}/5)');
-          await database.setAnonFields(data['count'] + 1);
-          await _createText(category, database, false);
+        _isAnon = true;
+      } else {
+        _isAnon = false;
+      }
+
+      final Map data = await database.getUserData(_isAnon);
+      final int _freeTexts = data['freeTexts'];
+      final int _paidTexts = data['paidTexts'];
+
+      if (_freeTexts >= 1) {
+        print('Using free texts - $_freeTexts');
+        await database.setUserFields(_isAnon, _freeTexts - 1, _paidTexts);
+        await _createText(_isAnon, category, database);
+      } else {
+        if (_paidTexts >= 1) {
+          print('Using paid texts - $_paidTexts');
+          await database.setUserFields(_isAnon, _freeTexts, _paidTexts - 1);
+          await _createText(_isAnon, category, database);
         } else {
-          // PAY-WALL
-          print('PAY-WALL - YES (${data['count']}/5)');
+          print('No available texts');
           Navigator.of(context).push(
             MaterialPageRoute<void>(
               fullscreenDialog: true,
               builder: (context) => SubscribePage(isAnon: true),
             ),
           );
-        }
-      } else {
-        // EMAIL USER
-        print('USER - EMAIL (UID)');
-        final Map data = await database.getUserData();
-        if (data['paidUser']) {
-          print('USER STATUS - PREMIUM');
-          // PAID USER
-          await _createText(category, database, true);
-        } else {
-          // NORMAL USER
-          print('USER STATUS - REGULAR');
-          if (data['count'] <= 10) {
-            // NO PAY-WALL
-            print('PAY-WALL - NO (${data['count']}/10)');
-            await database.setUserFields(data['count'] + 1, false);
-            await _createText(category, database, true);
-          } else {
-            // PAY-WALL
-            print('PAY-WALL - YES (${data['count']}/10)');
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                fullscreenDialog: true,
-                builder: (context) => SubscribePage(isAnon: false),
-              ),
-            );
-          }
         }
       }
     } catch (e) {
@@ -162,21 +145,21 @@ class _MainPageState extends State<MainPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           _buildCard(_height * .90, _width, myGroup, 'LIBRO', categoriesMap['LIBRO']['img'], categoriesMap['LIBRO']['color']),
-                          _buildCard(_height * .90, _width, myGroup, 'ENSAYO', categoriesMap['ENSAYO']['img'], categoriesMap['ENSAYO']['color']),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
                           _buildCard(_height * .90, _width, myGroup, 'PELICULA', categoriesMap['PELICULA']['img'], categoriesMap['PELICULA']['color']),
-                          _buildCard(_height * .90, _width, myGroup, 'ARTICULO', categoriesMap['ARTICULO']['img'], categoriesMap['ARTICULO']['color']),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           _buildCard(_height * .90, _width, myGroup, 'CITA', categoriesMap['CITA']['img'], categoriesMap['CITA']['color']),
-                          _buildCard(_height * .90, _width, myGroup, 'MUSICA', categoriesMap['MUSICA']['img'], categoriesMap['MUSICA']['color']),
+                          _buildCard(_height * .90, _width, myGroup, 'ENSAYO', categoriesMap['ENSAYO']['img'], categoriesMap['ENSAYO']['color']),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          _buildCard(_height * .90, _width, myGroup, 'ARTICULO', categoriesMap['ARTICULO']['img'], categoriesMap['ARTICULO']['color']),
+                          // _buildCard(_height * .90, _width, myGroup, 'MUSICA', categoriesMap['MUSICA']['img'], categoriesMap['MUSICA']['color']),
                         ],
                       ),
                     ],

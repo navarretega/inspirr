@@ -20,7 +20,10 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedPage = 0;
   bool navigationBar = true;
-  bool _paidUser;
+
+  bool _isAnon;
+  int _freeTexts;
+  int _paidTexts;
 
   void disableNav() {
     setState(() {
@@ -34,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     final _pages = [
       MainPage(disableNav: disableNav, did: widget.did),
       TextsPage(did: widget.did),
-      SettingsPage(did: widget.did, email: widget.email, paidUser: _paidUser),
+      SettingsPage(did: widget.did, email: widget.email, freeTexts: _freeTexts, paidTexts: _paidTexts),
     ];
 
     return Scaffold(
@@ -45,16 +48,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNavigationBar() {
+
+    if (widget.did == null) {
+      _isAnon = false;
+    } else {
+      _isAnon = true;
+    }
+
     return BottomNavigationBar(
       currentIndex: _selectedPage,
       onTap: (int index) async {
         if (index == 2) {
           final database = Provider.of<Database>(context, listen: false);
-          final Map data = await database.getUserData();
-          final bool paidUser = data['paidUser'];
+          final Map data = await database.getUserData(_isAnon);
+          final int freeTexts = data['freeTexts'];
+          final int paidTexts = data['paidTexts'];
           setState(() {
             _selectedPage = index;
-            _paidUser = paidUser;
+            _freeTexts = freeTexts;
+            _paidTexts = paidTexts;
           });
         } else {
           setState(() {

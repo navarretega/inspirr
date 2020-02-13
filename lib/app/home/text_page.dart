@@ -17,22 +17,38 @@ class TextPage extends StatelessWidget {
       @required this.formattedDate2})
       : super(key: key);
 
-  void _showDialog(context) {
+  void _showDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (_) => AssetGiffyDialog(
         image: Image.asset(
-          'assets/robot.gif',
+          'assets/robot-1.gif',
           fit: BoxFit.cover,
         ),
         title: Text(
-          'Considera lo siguiente',
+          '¿Cómo funciona?',
           style: TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.w700,
           ),
         ),
-        description: Text('Estamos utilizando algoritmos de Inteligencia Artificial para generar párrafos únicos irrepetibles. Es decir, los textos que generamos están 100% hechos por una computadora sin intervención humana.\n\nLa mayoría de veces es capaz de generar párrafos de cierta forma coherente y fluida, y si lo leyeras, difícilmente pensaras que una computadora fue capaz de general algo así.\n\nSin embargo, este no es siempre el caso. Es probable que a veces resulte en textos sin sentido alguno, y eso es completamente normal (Solo intenta generar texto de nuevo).\n\nNo existe ningún algoritmo capaz de generar textos o ensayos 100% coherentes sobre un tema en específico. Estamos seguros de que en un futuro eso será posible, pero por el momento no lo es.\n\nSi te interesa saber sobre el algoritmo detrás de esta aplicación, puedes leer el siguiente link https://openai.com/blog/better-language-models/'),
+        description: Text(
+            '''Utilizamos algoritmos de Inteligencia Artificial para generar una variedad de textos sin intervención humana. En términos generales, la computadora aprende a escribir de la misma forma que un humano aprende. Esto es una analogía simplista que no representa en su totalidad la realidad, pero si ayuda a entender cómo funciona internamente.
+
+Esencialmente a la computadora le enseñamos cientos de miles de textos hechos por humanos. El algoritmo que se utiliza internamente, basado en modelos matemáticos, aprende por si mismo a generar textos similares en base a los textos que ya ha visto. Es decir, le mostramos a la computadora miles de ensayos y esta aprende a formular sus propios ensayos.
+
+Regresando a la analogía mencionada, si a un estudiante le damos a leer 100 ensayos de filosofía, el mismo estudiante podrá generar su propio ensayo en base a lo aprendido de esos ensayos que leyó. Asimismo, si a una computadora le damos 100 o incluso 1000 ensayos de filosofía, esta será capaz de generar sus propios ensayos en base a lo aprendido. Mientras mas textos le enseñes mejores resultados tendrá (Aplica tanto para las personas como las computadoras)
+
+Ahora evidentemente el aprendizaje de un humano es diferente a la de una computadora, pero la Inteligencia Artificial trata emular de cierta forma al humano, pero ese ya es otro tema. 
+
+Hablando sobre los textos que la computadora genera en esta aplicación, la gran mayoría de veces se forman textos coherentes y auténticos. Es decir, no son una copia de algo que ya hayan visto sino son textos únicos y creativos que hasta veces llegan a ser tan creativos que no son coherentes. 
+
+No esperes que esta aplicación te genere tu ensayo de filosofía final de 5 páginas que tienes para mañana con una calificación de 100. Todavía no llegamos a ese nivel, pero estamos convencidos que pronto será posible. 
+
+El primordial objetivo de esta aplicación es que la utilices para obtener ideas que te puedan inspirar a crear algo; no para hacer un ‘copy-paste’.
+
+Si tienes alguna duda, comentario o te gustaría entender mas sobre nosotros escríbenos a alex@brisai.com'''
+        ),
         onlyOkButton: true,
         onOkButtonPressed: () {
           Navigator.pop(context);
@@ -41,6 +57,7 @@ class TextPage extends StatelessWidget {
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

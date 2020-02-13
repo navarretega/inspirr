@@ -45,228 +45,185 @@ class SubscribePage extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: _height * .15,
-              width: _width,
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: (_height * .15) * .50,
-                    width: _width,
-                    child: Center(
-                      child: AutoSizeText(
-                        '¿Quieres más?',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 40.0,
-                          color: Color(0xFF272727),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+        child: Container(
+          height: _height * .85,
+          width: _width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: (_height * .85) * .15,
+                width: _width,
+                child: Center(
+                  child: AutoSizeText(
+                    '¿Quieres más?',
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 32.0,
+                      color: Color(0xFF272727),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Container(
-                    height: (_height * .15) * .50,
-                    width: _width,
-                    child: Center(
+                ),
+              ),
+              SizedBox(height: (_height * .85) * .05),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 60.0),
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: AutoSizeText(
+                                '25 TEXTOS *',
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: _width * .05),
+                            SizedBox(
+                              width: _width * .30,
+                              child: RaisedButton(
+                                onPressed: () {},
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                color: Color(0xFF272727),
+                                child: AutoSizeText(
+                                  'MXN \$29',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(height: 1.0, thickness: 2.0,),
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: AutoSizeText(
+                                '70 TEXTOS *',
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: _width * .05),
+                            SizedBox(
+                              width: _width * .30,
+                              child: RaisedButton(
+                                onPressed: () {},
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                color: Color(0xFF272727),
+                                child: AutoSizeText(
+                                  'MXN \$29',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(height: 1.0, thickness: 2.0,),
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: AutoSizeText(
+                                '150 TEXTOS *',
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: _width * .05),
+                            SizedBox(
+                              width: _width * .30,
+                              child: RaisedButton(
+                                onPressed: () {},
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                color: Color(0xFF272727),
+                                child: AutoSizeText(
+                                  'MXN \$29',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: (_height * .85) * .05),
+              Container(
+                height: (_height * .85) * .20,
+                width: _width,
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
                       child: AutoSizeText(
-                        'Suscríbete para tener acceso a textos ilimitados',
+                        '* Un texto equivale a escoger una categoria\n(Libro, Pelicula, Cita, Ensayo o Articulo)',
                         maxLines: 2,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          color: Color(0xFF272727),
-                          fontWeight: FontWeight.w500,
+                        style: TextStyle(fontSize: 14.0),
+                      ),
+                    ),
+                    Expanded(
+                      child: FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Siempre tienes gratis 10 textos / dia',
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 17.0,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20.0),
-            Container(
-              height: _height * .80,
-              width: _width * .80,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 10.0),
-                  _proPlanCard(_height * .80, _width * .80, context),
-                  SizedBox(height: 25.0),
-                  _premiumPlanCard(_height * .80, _width * .80, context),
-                  Container(
-                    height: (_height * .80) * .20,
-                    width: _width * .80,
-                    child: FlatButton(
-                      onPressed: () { Navigator.of(context).pop(); },
-                      child: AutoSizeText(
-                        'Continua gratis (10 textos / dia)',
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _proPlanCard(height, width, context) {
-    return Container(
-      height: height * .35,
-      width: width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFFD0D0D0),
-            blurRadius: 10.0,
-            spreadRadius: 0.5,
-            offset: Offset(2.0, 2.0),
-          )
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Container(
-            height: (height * .35) * .25,
-            child: AutoSizeText(
-              'Pro',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25.0,
-                color: Color(0xFF272727),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            ],
           ),
-          Container(
-            height: (height * .30) * .25,
-            child: AutoSizeText(
-              '50 textos por día \n \$29 MXN / mes',
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Color(0xFF272727),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Container(
-            height: (height * .35) * .25,
-            child: _proPlanButton(context),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _premiumPlanCard(height, width, context) {
-    return Container(
-      height: height * .35,
-      width: width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFF272727),
-            blurRadius: 10.0,
-            spreadRadius: 0.5,
-            offset: Offset(2.0, 2.0),
-          )
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Container(
-            height: (height * .35) * .25,
-            child: AutoSizeText(
-              'Premium',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25.0,
-                color: Color(0xFF272727),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          Container(
-            height: (height * .30) * .25,
-            child: AutoSizeText(
-              'Textos ilimitados \n \$49 MXN / mes',
-              maxLines: 2,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.0,
-                color: Color(0xFF272727),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Container(
-            height: (height * .35) * .25,
-            child: _premiumPlanButton(context),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _proPlanButton(context) {
-    return RaisedButton(
-      onPressed: () {
-        subscribe(context, 'PRO');
-      },
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        side: BorderSide(color: Color(0xFF272727)),
-      ),
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
-      child: AutoSizeText(
-        'SELECCIONAR',
-        style: TextStyle(
-          color: Color(0xFF272727),
-          fontSize: 20.0,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-    );
-  }
-
-  Widget _premiumPlanButton(context) {
-    return RaisedButton(
-      onPressed: () {
-        subscribe(context, 'PREMIUM');
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        // side: BorderSide(color: Colors.white),
-      ),
-      padding: EdgeInsets.fromLTRB(20, 12, 20, 12),
-      color: Color(0xFF272727),
-      child: AutoSizeText(
-        'SELECCIONAR',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 20.0,
-          fontWeight: FontWeight.w300,
         ),
       ),
     );

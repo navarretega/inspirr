@@ -18,7 +18,7 @@ class Gpt2 {
     try {
       print('Calling API for $category - STARTING');
       Map bodyData = {'category': category};
-      Response response = await post('http://10.0.2.2:8000/api/endpoint',
+      Response response = await post('https://gpt-xam7yts73a-uc.a.run.app/api/endpoint',
           headers: {'Content-Type': 'application/json'},
           body: json.encode(bodyData))
           .timeout(const Duration(seconds: 30));

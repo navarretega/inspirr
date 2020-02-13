@@ -4,10 +4,8 @@ import 'package:inspirr/services/api_path.dart';
 import 'package:inspirr/services/firestore_service.dart';
 
 abstract class Database {
-  Future<Map> getUserData();
-  Future<Map> getAnonData();
-  Future<void> setUserFields(int cnt, bool val);
-  Future<void> setAnonFields(int cnt);
+  Future<Map> getUserData(bool isAnon);
+  Future<void> setUserFields(bool isAnon, int freeTexts, int paidTexts);
   Future<void> createText(TextAI text);
   Stream<List<TextAI>> textsStream();
 }
@@ -22,41 +20,38 @@ class FirestoreDatabase implements Database {
 
   final _service = FirestoreService.instance;
 
-  Future<Map> getAnonData() async {
-    final Map data = await _service.getAnonData(did);
-    if (data == null) {
-      await setAnonFields(0);
-      return {'count': 0};
+  Future<Map> getUserData(bool isAnon) async {
+    if (isAnon) {
+      final Map data = await _service.getAnonData(did);
+      if (data == null) {
+        await setUserFields(true, 10, 0);
+        return {'freeTexts': 10, 'paidTexts': 0};
+      } else {
+        return {'freeTexts': data['freeTexts'], 'paidTexts': data['paidTexts']};
+      }
     } else {
-      return {'count': data['count']};
+      final Map data = await _service.getUserData(uid);
+      if (data == null) {
+        await setUserFields(false, 10, 0);
+        return {'freeTexts': 10, 'paidTexts': 0};
+      } else {
+        return {'freeTexts': data['freeTexts'], 'paidTexts': data['paidTexts']};
+      }
     }
   }
 
-  Future<void> setAnonFields(int cnt) async {
-    await _service.setData(
-        path: APIPath.anons(did),
-        data: {
-          'count': cnt
-        }
-    );
-  }
-
-  Future<Map> getUserData() async {
-    final Map data = await _service.getUserData(uid);
-    if (data == null) {
-      await setUserFields(0, false);
-      return {'count': 0, 'paidUser': false};
+  Future<void> setUserFields(bool isAnon, int freeTexts, int paidTexts) async {
+    String path;
+    if (isAnon) {
+      path = APIPath.anons(did);
     } else {
-      return {'count': data['count'], 'paidUser': data['paidUser']};
+      path = APIPath.users(uid);
     }
-  }
-
-  Future<void> setUserFields(int cnt, bool val) async {
     await _service.setData(
-        path: APIPath.users(uid),
+        path: path,
         data: {
-          'count': cnt,
-          'paidUser': val,
+          'freeTexts': freeTexts,
+          'paidTexts': paidTexts,
         }
     );
   }
