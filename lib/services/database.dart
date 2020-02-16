@@ -24,16 +24,16 @@ class FirestoreDatabase implements Database {
     if (isAnon) {
       final Map data = await _service.getAnonData(did);
       if (data == null) {
-        await setUserFields(true, 10, 0);
-        return {'freeTexts': 10, 'paidTexts': 0};
+        await setUserFields(true, 25, 0);
+        return {'freeTexts': 25, 'paidTexts': 0};
       } else {
         return {'freeTexts': data['freeTexts'], 'paidTexts': data['paidTexts']};
       }
     } else {
       final Map data = await _service.getUserData(uid);
       if (data == null) {
-        await setUserFields(false, 10, 0);
-        return {'freeTexts': 10, 'paidTexts': 0};
+        await setUserFields(false, 25, 0);
+        return {'freeTexts': 25, 'paidTexts': 0};
       } else {
         return {'freeTexts': data['freeTexts'], 'paidTexts': data['paidTexts']};
       }

@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:inspirr/services/gpt2.dart';
-import 'package:inspirr/utils/asset.dart';
 import 'package:inspirr/utils/constants.dart';
 import 'package:inspirr/utils/network.dart';
 import 'package:inspirr/utils/screen_size.dart';

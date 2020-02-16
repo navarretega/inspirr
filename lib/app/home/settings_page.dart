@@ -178,26 +178,26 @@ Si tienes alguna duda, comentario o te gustaría entender mas sobre nosotros esc
 
     return Column(
       children: <Widget>[
-        Container(
-          height: height * .25,
-          child: ListTile(
-            title: AutoSizeText(
-              '¿Quieres más textos?',
-              maxLines: 1,
-              group: myGroup,
-              style: TextStyle(fontSize: 20.0),
-            ),
-            trailing: Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  fullscreenDialog: true,
-                  builder: (context) => SubscribePage(isAnon: _isAnon),
-                ),
-              );
-            },
-          ),
-        ),
+        // Container(
+        //   height: height * .25,
+        //   child: ListTile(
+        //     title: AutoSizeText(
+        //       '¿Quieres más textos?',
+        //       maxLines: 1,
+        //       group: myGroup,
+        //       style: TextStyle(fontSize: 20.0),
+        //     ),
+        //     trailing: Icon(Icons.arrow_forward_ios),
+        //     onTap: () {
+        //       Navigator.of(context).push(
+        //         MaterialPageRoute<void>(
+        //           fullscreenDialog: true,
+        //           builder: (context) => SubscribePage(isAnon: _isAnon),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
         Container(
           height: height * .25,
           child: ListTile(
