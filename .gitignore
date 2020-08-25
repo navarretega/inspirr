@@ -38,6 +38,7 @@ lib/generated_plugin_registrant.dart
 
 # Key
 android/key.properties
+ios/Runner/GoogleService-Info.plist
 
 api/*.json
 api/data
